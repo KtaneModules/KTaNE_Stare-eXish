@@ -403,7 +403,7 @@ public class StareModule : MonoBehaviour
                     }
                 }
                 count2 = Regex.Matches(bombInfo.GetSerialNumber(), "[TURQUOISE]").Count;
-                desiredState = ((count < 9) == (count2 % 2 == 0)) ? State.Closed : State.Open;
+                desiredState = ((count < 8) == (count2 % 2 == 0)) ? State.Closed : State.Open;
                 break;
                 
             case 7: //purple
