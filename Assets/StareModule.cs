@@ -34,6 +34,7 @@ public class StareModule : MonoBehaviour
     
     private List<int> times;
     
+    private bool almostDone = false;
     private bool isSolved = false;
     
     private int initialTime = 0;
@@ -131,9 +132,17 @@ public class StareModule : MonoBehaviour
     void OnPress()
     {
         GetComponent<KMAudio>().PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, transform);
+        module.AddInteractionPunch();
         if (!isSolved)
         {
-            module.AddInteractionPunch();
+            if (almostDone)
+            {
+                Debug.LogFormat("[The Stare #{0}] Module solved.", _moduleId);
+                moduleInfo.ModuleDisplayName = "The Stare";
+                moduleInfo.HandlePass();
+                isSolved = true;
+                return;
+            }
             List<string> names = bombInfo.GetModuleNames();
             List<string> stares = new List<string>();
             Regex stareRegex = new Regex(@"[1-9][1-9][XOC][OC]");
@@ -194,12 +203,11 @@ public class StareModule : MonoBehaviour
             }
             if (allSolved)
             {
-                Debug.LogFormat("[The Stare #{0}] All Eyes are in their desired states. Module solved.", _moduleId);
-                moduleInfo.ModuleDisplayName = "The Stare";
-                moduleInfo.HandlePass();
+                Debug.LogFormat("[The Stare #{0}] All Eyes are in their desired states.", _moduleId);
+                almostDone = true;
                 break;
             }
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(0.05f);
         }
     }
 
