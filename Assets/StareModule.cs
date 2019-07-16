@@ -35,7 +35,19 @@ public class StareModule : MonoBehaviour
     private int type;
     private int modifier;
 
-    private string moduleName = "";
+    sealed class StareBombInfo
+    {
+        public List<StareModule> Modules = new List<StareModule>();
+        public List<bool> altered = new List<bool>();
+    }
+
+    private bool localalt = false;
+
+    private static readonly Dictionary<string, StareBombInfo> _infos = new Dictionary<string, StareBombInfo>();
+
+    private StareBombInfo info;
+
+    public string moduleName = "";
 
     private List<int> times;
 
@@ -67,17 +79,6 @@ public class StareModule : MonoBehaviour
         modifier = UnityEngine.Random.Range(0, 9);
         modifier = (modifier > 6) ? 2 : (modifier > 4) ? 1 : 0;
         moduleName = (color + 1).ToString() + (type + 1 + (modifier * 3)).ToString() + "XO";
-        List<string> names = bombInfo.GetModuleNames();
-        List<string> stares = new List<string>();
-        Regex stareRegex = new Regex(@"[1-9][1-9][XOC][OC]");
-        foreach (string name in names)
-        {
-            Match match = stareRegex.Match(name);
-            if (match.Success)
-            {
-                stares.Add(name);
-            }
-        }
         GetComponent<KMBombModule>().OnActivate += ActivateModule;
     }
 
@@ -103,24 +104,29 @@ public class StareModule : MonoBehaviour
         model.material = materials[modifier];
         sprite.color = colors[color];
         model.material.color = colors[color];
+        var serialNumber = bombInfo.GetSerialNumber();
+        if (!_infos.ContainsKey(serialNumber))
+            _infos[serialNumber] = new StareBombInfo();
+        info = _infos[serialNumber];
+        info.Modules.Add(this);
+        info.altered.Add(false);
         module.OnInteract += delegate () { OnPress(); return false; };
         GetComponent<KMBombModule>().OnPass += delegate () { isSolved = true; /*sprite.sprite = eyes[type * 2 + 1];*/ return true; };
     }
 
     void SetDesiredState()
     {
-        List<string> names = bombInfo.GetModuleNames();
         List<string> stares = new List<string>();
         Regex stareRegex = new Regex(@"[1-9][1-9][XOC][OC]");
-        foreach (string name in names)
+        foreach (StareModule mod in info.Modules)
         {
-            Match match = stareRegex.Match(name);
+            Match match = stareRegex.Match(mod.moduleName);
             if (match.Success)
             {
-                stares.Add(name);
+                stares.Add(mod.moduleName);
             }
         }
-        char desiredState = state(moduleInfo.ModuleDisplayName, stares);
+        char desiredState = state(moduleName, stares);
         if(initialState == State.Closed)
         {
             moduleName = moduleName.Substring(0, 2) + 'C' + desiredState;
@@ -177,18 +183,17 @@ public class StareModule : MonoBehaviour
                 isSolved = true;
                 return;
             }
-            List<string> names = bombInfo.GetModuleNames();
             List<string> stares = new List<string>();
             Regex stareRegex = new Regex(@"[1-9][1-9][XOC][OC]");
-            foreach (string name in names)
+            foreach (StareModule mod in info.Modules)
             {
-                Match match = stareRegex.Match(name);
+                Match match = stareRegex.Match(mod.moduleName);
                 if (match.Success)
                 {
-                    stares.Add(name);
+                    stares.Add(mod.moduleName);
                 }
             }
-            if (!ToggleTime(moduleInfo.ModuleDisplayName, stares))
+            if (!ToggleTime(moduleName, stares))
             {
                 string temp = moduleInfo.ModuleDisplayName;
                 moduleInfo.ModuleDisplayName = "The Stare";
@@ -197,6 +202,12 @@ public class StareModule : MonoBehaviour
             }
             else
             {
+                if(localalt == false)
+                {
+                    localalt = true;
+                    info.altered.RemoveAt(0);
+                    info.altered.Add(true);
+                }
                 sprite.sprite = eyes[type * 2 + ((moduleName[2] == 'C') ? 0 : 1)];
                 string oldName = moduleName;
                 moduleName = "" + oldName[0] + oldName[1] + ((oldName[2] == 'C') ? 'O' : 'C') + oldName[3];
@@ -206,46 +217,33 @@ public class StareModule : MonoBehaviour
                     StartCoroutine(WaitForSolve());
                 }
             }
+            for(int j = 0; j < info.altered.Count; j++)
+            {
+                Debug.Log("Condition: " + info.altered.ElementAt(j)+j);
+            }
         }
     }
 
     IEnumerator WaitForSolve()
     {
-        while (moduleName[2] == moduleName[3])
+        while (info.altered.Contains(false) || !allAreEqual())
         {
-            List<string> names = bombInfo.GetModuleNames();
-            List<string> stares = new List<string>();
-            Regex stareRegex = new Regex(@"[1-9][1-9][XOC][OC]");
-            foreach (string name in names)
-            {
-                Match match = stareRegex.Match(name);
-                if (match.Success)
-                {
-                    stares.Add(name);
-                }
-            }
-            bool allSolved = true;
-            foreach (string eye in stares)
-            {
-                if (eye[2] != eye[3])
-                {
-                    allSolved = false;
-                    /*
-                    name = moduleInfo.ModuleDisplayName;
-                    moduleInfo.ModuleDisplayName = "The Stare";
-                    moduleInfo.HandleStrike();
-                    moduleInfo.ModuleDisplayName = name;
-                    */
-                }
-            }
-            if (allSolved)
-            {
-                Debug.LogFormat("[The Stare #{0}] All Eyes are in their desired states.", _moduleId);
-                almostDone = true;
-                break;
-            }
             yield return new WaitForSeconds(0.05f);
         }
+        Debug.LogFormat("[The Stare #{0}] All Eyes are in their desired states.", _moduleId);
+        almostDone = true;
+    }
+
+    private bool allAreEqual()
+    {
+        for(int i = 0; i < info.Modules.Count; i++)
+        {
+            if(info.Modules.ElementAt(i).moduleName[2] != info.Modules.ElementAt(i).moduleName[3])
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     Type eyeType(string eye)

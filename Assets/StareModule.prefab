@@ -555,6 +555,7 @@ MonoBehaviour:
   - {r: 0.5, g: 0.25, b: 0.625, a: 1}
   - {r: 0.625, g: 0.625, b: 0.625, a: 1}
   - {r: 0.9375, g: 0.9375, b: 0.9375, a: 1}
+  moduleName: 
 --- !u!114 &114559169380039886
 MonoBehaviour:
   m_ObjectHideFlags: 1
