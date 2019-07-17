@@ -67,6 +67,8 @@ public class StareModule : MonoBehaviour
 
     private State initialState;
 
+    private bool coRunning = false;
+
     void Start()
     {
         colorblindActive = Colorblind.ColorblindModeActive;
@@ -212,26 +214,24 @@ public class StareModule : MonoBehaviour
                 string oldName = moduleName;
                 moduleName = "" + oldName[0] + oldName[1] + ((oldName[2] == 'C') ? 'O' : 'C') + oldName[3];
                 Debug.LogFormat("[The Stare #{0}] Successfully {1} the Eye at " + bombInfo.GetFormattedTime() + '.', _moduleId, (moduleName[2] == 'C' ? "closed" : "opened"));
-                if (moduleName[2] == moduleName[3])
+                if (moduleName[2] == moduleName[3] && coRunning == false)
                 {
                     StartCoroutine(WaitForSolve());
                 }
-            }
-            for(int j = 0; j < info.altered.Count; j++)
-            {
-                Debug.Log("Condition: " + info.altered.ElementAt(j)+j);
             }
         }
     }
 
     IEnumerator WaitForSolve()
     {
+        coRunning = true;
         while (info.altered.Contains(false) || !allAreEqual())
         {
             yield return new WaitForSeconds(0.05f);
         }
         Debug.LogFormat("[The Stare #{0}] All Eyes are in their desired states.", _moduleId);
         almostDone = true;
+        coRunning = false;
     }
 
     private bool allAreEqual()
@@ -540,26 +540,25 @@ public class StareModule : MonoBehaviour
     //twitch plays
     private bool timeIsValid(string s)
     {
-        char[] valids = { '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', ':' };
-        char[] validints = { '1', '2', '3', '4', '5', '6', '7', '8', '9', '0' };
-        foreach (char c in s)
+        Regex stareRegex1 = new Regex(@"[0-9][0-9]");
+        Regex stareRegex2 = new Regex(@"[0-9][:][0-9][0-9]");
+        Regex stareRegex3 = new Regex(@"[0-9][0-9][:][0-9][0-9]");
+        Regex stareRegex4 = new Regex(@"[0-9][:][0-9][0-9][:][0-9][0-9]");
+        Match match = stareRegex1.Match(s);
+        Match match2 = stareRegex2.Match(s);
+        Match match3 = stareRegex3.Match(s);
+        Match match4 = stareRegex4.Match(s);
+        if(match.Success && s.Length == 2)
         {
-            if (!valids.Contains(c))
-            {
-                return false;
-            }
+            return true;
         }
-        bool atleast2start = false;
-        bool end = false;
-        if (validints.Contains(s.ElementAt(0)) && validints.Contains(s.ElementAt(1)))
+        else if(match2.Success && s.Length == 4)
         {
-            atleast2start = true;
-        }
-        if(validints.Contains(s.ElementAt(s.Length-1)) && validints.Contains(s.ElementAt(s.Length - 2)) && s.ElementAt(s.Length - 3).Equals(':'))
+            return true;
+        }else if (match3.Success && s.Length == 5)
         {
-            end = true;
-        }
-        if(atleast2start == true && end == true)
+            return true;
+        }else if (match4.Success && s.Length == 7)
         {
             return true;
         }
@@ -599,10 +598,18 @@ public class StareModule : MonoBehaviour
         {
             if(parameters.Length == 2)
             {
-                if (timeIsValid(parameters[1]) && parameters[1].Length >= 5)
+                if (timeIsValid(parameters[1]))
                 {
                     yield return null;
-                    while(!bombInfo.GetFormattedTime().Equals(parameters[1])) yield return "trycancel The Eye's toggle was cancelled due to a cancel request.";
+                    if(parameters[1].Length == 2)
+                    {
+                        parameters[1] = "00:" + parameters[1];
+                    }else if (parameters[1].Length == 4)
+                    {
+                        parameters[1] = "0" + parameters[1];
+                    }
+                    yield return "sendtochat Eye toggle time set for '" + parameters[1] + "'";
+                    while (!bombInfo.GetFormattedTime().Equals(parameters[1])) yield return "trycancel The Eye's toggle was cancelled due to a cancel request.";
                     module.OnInteract();
                 }
             }
