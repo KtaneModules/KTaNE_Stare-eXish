@@ -380,7 +380,25 @@ public class StareModule : MonoBehaviour
                 break;
 
             case 3: //gold
-                desiredState = ((allEyes.Count() > initialTime / 60) == (eyeType(eye) == Type.Smol)) ? State.Closed : State.Open;
+                if(allEyes.Count() < (initialTime / 60))
+                {
+                    desiredState = State.Open;
+                }
+                else
+                {
+                    desiredState = State.Closed;
+                }
+                if(eyeType(eye) == Type.Smol)
+                {
+                    if(desiredState == State.Open)
+                    {
+                        desiredState = State.Closed;
+                    }
+                    else
+                    {
+                        desiredState = State.Open;
+                    }
+                }
                 break;
 
             case 4: //yellow
