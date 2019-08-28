@@ -75,7 +75,7 @@ public class StareModule : MonoBehaviour
         cblind.GetComponent<TextMesh>().text = "";
         initialTime = (int)bombInfo.GetTime();
         _moduleId = _moduleIdCounter++;
-        color = UnityEngine.Random.Range(0, colors.Length);
+        color = UnityEngine.Random.Range(0, 9);
         type = UnityEngine.Random.Range(0, 7);
         type = (type > 4) ? 2 : (type > 2) ? 1 : 0;
         modifier = UnityEngine.Random.Range(0, 9);
@@ -129,7 +129,7 @@ public class StareModule : MonoBehaviour
             }
         }
         char desiredState = state(moduleName, stares);
-        if(initialState == State.Closed)
+        if (initialState == State.Closed)
         {
             moduleName = moduleName.Substring(0, 2) + 'C' + desiredState;
         }
@@ -154,7 +154,7 @@ public class StareModule : MonoBehaviour
         if (colorblindActive)
         {
             Debug.LogFormat("[The Stare #{0}] Colorblind mode is active!", _moduleId);
-            cblind.GetComponent<TextMesh>().text = colorName.Substring(0,3);
+            cblind.GetComponent<TextMesh>().text = colorName.Substring(0, 3);
         }
         switch (type)
         {
@@ -213,7 +213,13 @@ public class StareModule : MonoBehaviour
                 sprite.sprite = eyes[type * 2 + ((moduleName[2] == 'C') ? 0 : 1)];
                 string oldName = moduleName;
                 moduleName = "" + oldName[0] + oldName[1] + ((oldName[2] == 'C') ? 'O' : 'C') + oldName[3];
-                Debug.LogFormat("[The Stare #{0}] Successfully {1} the Eye at " + bombInfo.GetFormattedTime() + '.', _moduleId, (moduleName[2] == 'C' ? "closed" : "opened"));
+                if ((int)bombInfo.GetTime() < 60)
+                {
+                    Debug.LogFormat("[The Stare #{0}] Successfully {1} the Eye at 00:" + (int)bombInfo.GetTime() + '.', _moduleId, (moduleName[2] == 'C' ? "closed" : "opened"));
+                }
+                else {
+                    Debug.LogFormat("[The Stare #{0}] Successfully {1} the Eye at " + bombInfo.GetFormattedTime() + '.', _moduleId, (moduleName[2] == 'C' ? "closed" : "opened"));
+                }
                 if (moduleName[2] == moduleName[3] && coRunning == false)
                 {
                     StartCoroutine(WaitForSolve());
@@ -261,6 +267,10 @@ public class StareModule : MonoBehaviour
         int count = 0;
         bool applied = false;
         string time = bombInfo.GetFormattedTime();
+        if ((int)bombInfo.GetTime() < 60)
+        {
+            time = "00:" + (int)bombInfo.GetTime();
+        }
         if (eye[2] != 'C')
         {
             applied = true;
@@ -326,7 +336,14 @@ public class StareModule : MonoBehaviour
         {
             count += Regex.Matches(time, "9").Count;
         }
-        Debug.LogFormat("[The Stare #{0}] Current time (" + bombInfo.GetFormattedTime() + ") has {1} needed digit{2}.{3}", _moduleId, count, (count == 1) ? "" : "s", (count % 2 == 1) ? "" : " Strike due to an even number of needed digits!");
+        if ((int)bombInfo.GetTime() < 60)
+        {
+            Debug.LogFormat("[The Stare #{0}] Current time (00:" + (int)bombInfo.GetTime() + ") has {1} needed digit{2}.{3}", _moduleId, count, (count == 1) ? "" : "s", (count % 2 == 1) ? "" : " Strike due to an even number of needed digits!");
+        }
+        else
+        {
+            Debug.LogFormat("[The Stare #{0}] Current time (" + bombInfo.GetFormattedTime() + ") has {1} needed digit{2}.{3}", _moduleId, count, (count == 1) ? "" : "s", (count % 2 == 1) ? "" : " Strike due to an even number of needed digits!");
+        }
         return (count % 2 == 1);
     }
 
@@ -380,7 +397,7 @@ public class StareModule : MonoBehaviour
                 break;
 
             case 3: //gold
-                if(allEyes.Count() < (initialTime / 60))
+                if (allEyes.Count() < (initialTime / 60))
                 {
                     desiredState = State.Open;
                 }
@@ -388,9 +405,9 @@ public class StareModule : MonoBehaviour
                 {
                     desiredState = State.Closed;
                 }
-                if(eyeType(eye) == Type.Smol)
+                if (eyeType(eye) == Type.Smol)
                 {
-                    if(desiredState == State.Open)
+                    if (desiredState == State.Open)
                     {
                         desiredState = State.Closed;
                     }
@@ -452,19 +469,37 @@ public class StareModule : MonoBehaviour
 
             case 6: //turquoise
                 count = 0;
-                foreach (string i in allEyes)
+                if(eyeMod(eye) == Mod.Rift)
                 {
-                    if ((eyeType(i) == eyeType(eye)) && (count % 3 < 2))
+                    count = 1;
+                }
+                /**int ext = 0;
+                for (int i = 0; i < allEyes.Count; i++)
+                {
+                    if ((eyeType(allEyes[i]) == eyeType(eye)))
                     {
                         count++;
                     }
-                    if ((eyeMod(i) == eyeMod(eye)) && (count % 9 < 6))
+                    if ((eyeMod(allEyes[i]) == eyeMod(eye)))
                     {
-                        count += 3;
+                        ext++;
                     }
-                }
+
+                }*/
                 count2 = Regex.Matches(bombInfo.GetSerialNumber(), "[TURQUOISE]").Count;
-                desiredState = ((count < 8) == (count2 % 2 == 0)) ? State.Closed : State.Open;
+                //desiredState = ((count == 1 && ext == 1) == (count2 % 2 == 0)) ? State.Closed : State.Open;
+                if ((count == 1) && (count2 % 2 == 0))
+                {
+                    desiredState = State.Closed;
+                }
+                else if ((count == 1) || (count2 % 2 == 0))
+                {
+                    desiredState = State.Open;
+                }
+                else
+                {
+                    desiredState = State.Closed;
+                }
                 break;
 
             case 7: //purple
@@ -627,7 +662,16 @@ public class StareModule : MonoBehaviour
                         parameters[1] = "0" + parameters[1];
                     }
                     yield return "sendtochat Eye toggle time set for '" + parameters[1] + "'";
-                    while (!bombInfo.GetFormattedTime().Equals(parameters[1])) yield return "trycancel The Eye's toggle was cancelled due to a cancel request.";
+                    if ((int)bombInfo.GetTime() < 60)
+                    {
+                        int temp = 0;
+                        int.TryParse(parameters[1].Substring(parameters[1].Length-2, 2), out temp);
+                        while ((int)bombInfo.GetTime() != temp) yield return "trycancel The Eye's toggle was cancelled due to a cancel request.";
+                    }
+                    else
+                    {
+                        while (!bombInfo.GetFormattedTime().Equals(parameters[1])) yield return "trycancel The Eye's toggle was cancelled due to a cancel request.";
+                    }
                     module.OnInteract();
                 }
             }
