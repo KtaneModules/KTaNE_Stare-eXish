@@ -619,7 +619,7 @@ public class StareModule : MonoBehaviour
     }
 
     #pragma warning disable 414
-    private readonly string TwitchHelpMessage = @"!{0} toggle 09:44 [Switches the state of the eye when the bomb's timer is '09:44' exactly] | !{0} toggle [Switches the state of the eye (the last toggle for submitting needs no timer)] | !{0} colorblind [Toggle colorblind mode]";
+    private readonly string TwitchHelpMessage = @"!{0} toggle <time> [Switches the state of the eye when the bomb's timer is the specified time] | !{0} toggle [Switches the state of the eye (the last toggle for submitting needs no time parameter)] | !{0} colorblind [Toggle colorblind mode] | Valid time formats are ##, #:##, ##:##, and #:##:##";
     #pragma warning restore 414
     IEnumerator ProcessTwitchCommand(string command)
     {
@@ -657,9 +657,22 @@ public class StareModule : MonoBehaviour
                     if(parameters[1].Length == 2)
                     {
                         parameters[1] = "00:" + parameters[1];
-                    }else if (parameters[1].Length == 4)
+                    }
+                    else if (parameters[1].Length == 4)
                     {
                         parameters[1] = "0" + parameters[1];
+                    }
+                    else if (parameters[1].Length == 7)
+                    {
+                        int temp = 0;
+                        int temp2 = 0;
+                        int.TryParse(parameters[1].Substring(0, 1), out temp);
+                        temp *= 60;
+                        int.TryParse(parameters[1].Substring(2, 2), out temp2);
+                        temp += temp2;
+                        string tem = "" + temp;
+                        tem += parameters[1].Substring(4, 3);
+                        parameters[1] = tem;
                     }
                     yield return "sendtochat Eye toggle time set for '" + parameters[1] + "'";
                     if ((int)bombInfo.GetTime() < 60)
