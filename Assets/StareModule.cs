@@ -213,7 +213,11 @@ public class StareModule : MonoBehaviour
                 sprite.sprite = eyes[type * 2 + ((moduleName[2] == 'C') ? 0 : 1)];
                 string oldName = moduleName;
                 moduleName = "" + oldName[0] + oldName[1] + ((oldName[2] == 'C') ? 'O' : 'C') + oldName[3];
-                if ((int)bombInfo.GetTime() < 60)
+                if ((int)bombInfo.GetTime() < 10)
+                {
+                    Debug.LogFormat("[The Stare #{0}] Successfully {1} the Eye at 00:0" + (int)bombInfo.GetTime() + '.', _moduleId, (moduleName[2] == 'C' ? "closed" : "opened"));
+                }
+                else if ((int)bombInfo.GetTime() < 60 && (int)bombInfo.GetTime() > 10)
                 {
                     Debug.LogFormat("[The Stare #{0}] Successfully {1} the Eye at 00:" + (int)bombInfo.GetTime() + '.', _moduleId, (moduleName[2] == 'C' ? "closed" : "opened"));
                 }
@@ -267,7 +271,11 @@ public class StareModule : MonoBehaviour
         int count = 0;
         bool applied = false;
         string time = bombInfo.GetFormattedTime();
-        if ((int)bombInfo.GetTime() < 60)
+        if ((int)bombInfo.GetTime() < 10)
+        {
+            time = "00:0" + (int)bombInfo.GetTime();
+        }
+        else if ((int)bombInfo.GetTime() < 60 && (int)bombInfo.GetTime() > 10)
         {
             time = "00:" + (int)bombInfo.GetTime();
         }
@@ -336,7 +344,11 @@ public class StareModule : MonoBehaviour
         {
             count += Regex.Matches(time, "9").Count;
         }
-        if ((int)bombInfo.GetTime() < 60)
+        if ((int)bombInfo.GetTime() < 10)
+        {
+            Debug.LogFormat("[The Stare #{0}] Current time (00:0" + (int)bombInfo.GetTime() + ") has {1} needed digit{2}.{3}", _moduleId, count, (count == 1) ? "" : "s", (count % 2 == 1) ? "" : " Strike due to an even number of needed digits!");
+        }
+        else if ((int)bombInfo.GetTime() < 60 && (int)bombInfo.GetTime() > 10)
         {
             Debug.LogFormat("[The Stare #{0}] Current time (00:" + (int)bombInfo.GetTime() + ") has {1} needed digit{2}.{3}", _moduleId, count, (count == 1) ? "" : "s", (count % 2 == 1) ? "" : " Strike due to an even number of needed digits!");
         }
