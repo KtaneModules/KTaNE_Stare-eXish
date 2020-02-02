@@ -932,25 +932,28 @@ public class StareModule : MonoBehaviour
                 count = 0;
                 foreach (string i in allEyes)
                 {
-                    if (eyeType(i) == Type.Smol)
+                    if(i[0] == '8')
                     {
-                        count += 1;
-                    }
-                    if (eyeType(i) == Type.Normal)
-                    {
-                        count += 2;
-                    }
-                    if (eyeType(i) == Type.Alt)
-                    {
-                        count += 3;
-                    }
-                    if (eyeMod(i) == Mod.Rift)
-                    {
-                        count += 5;
-                    }
-                    if (eyeMod(i) == Mod.Warp)
-                    {
-                        count += 10;
+                        if (eyeType(i) == Type.Smol)
+                        {
+                            count += 1;
+                        }
+                        if (eyeType(i) == Type.Normal)
+                        {
+                            count += 2;
+                        }
+                        if (eyeType(i) == Type.Alt)
+                        {
+                            count += 3;
+                        }
+                        if (eyeMod(i) == Mod.Rift)
+                        {
+                            count += 5;
+                        }
+                        if (eyeMod(i) == Mod.Warp)
+                        {
+                            count += 10;
+                        }
                     }
                 }
                 Debug.LogFormat("[The Stare #{0}] Gray Eye Rule: The total number received from each gray eye was {1}.", _moduleId, count);

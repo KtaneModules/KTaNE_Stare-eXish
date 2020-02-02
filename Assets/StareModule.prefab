@@ -74,7 +74,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4502641551628606}
   - component: {fileID: 212366536443620068}
-  - component: {fileID: 114363547660191322}
+  - component: {fileID: 114461730070697720}
   m_Layer: 0
   m_Name: Sprite
   m_TagString: Untagged
@@ -160,7 +160,7 @@ GameObject:
   - component: {fileID: 114843849559651870}
   - component: {fileID: 114209400424505478}
   - component: {fileID: 114553155808749424}
-  - component: {fileID: 114255842327734252}
+  - component: {fileID: 114546249064582056}
   m_Layer: 0
   m_Name: StareModule
   m_TagString: Untagged
@@ -556,18 +556,6 @@ MonoBehaviour:
   m_Script: {fileID: -271661043, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114255842327734252
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1926758091844616}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c1cfb889a07d5fd4e9baed7960bb397f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _colorblindMode: 0
 --- !u!114 &114343458395191122
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -581,7 +569,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HighlightScale: {x: 1, y: 1, z: 1}
   OutlineAmount: 0
---- !u!114 &114363547660191322
+--- !u!114 &114391884225923878
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1926758091844616}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1675560866, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114461730070697720
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -594,17 +593,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShaderNames:
   - Sprites/Default
---- !u!114 &114391884225923878
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1926758091844616}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -1675560866, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114482472470794128
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -617,7 +605,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShaderNames:
-  - GUI/KT 3D Text
+  - GUI/KT 3D Text Diffuse
+--- !u!114 &114546249064582056
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1926758091844616}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5756f84abcf2c2140a88e77b75df2adb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _colorblindMode: 1
 --- !u!114 &114553155808749424
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -632,7 +632,7 @@ MonoBehaviour:
   bombInfo: {fileID: 114843849559651870}
   moduleInfo: {fileID: 114174278980545792}
   module: {fileID: 114134819238894614}
-  Colorblind: {fileID: 114255842327734252}
+  Colorblind: {fileID: 114546249064582056}
   sprite: {fileID: 212366536443620068}
   model: {fileID: 23692291389042308}
   cblind: {fileID: 1964985174446340}
