@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Name: ModConfig
   m_EditorClassIdentifier: 
   id: StareModule
-  title: The Stare [REUPLOAD]
-  author: 
+  title: The Stare
+  author: DVD, eXish
   description: "Link to the old The Stare (no longer maintained): https://steamcommunity.com/sharedfiles/filedetails/?id=1663359310\r\n\r\nPutting
     the \"Eye\" in \"I see you\".\r\n\r\nModule by DVD, maintained by eXish.\r\n\r\nmoduleID:
     StareModule\r\n\r\nTwitch Plays Supported\r\n\r\nManual [HTML]: https://ktane.timwi.de/HTML/The%20Stare.html\r\nManual
     [PDF]: https://ktane.timwi.de/PDF/The%20Stare.pdf"
-  version: 1.9.3
+  version: 1.9.5
   outputFolder: build
   previewImage: {fileID: 2800000, guid: 7be49aab750d78f4d86459eafe554abb, type: 3}

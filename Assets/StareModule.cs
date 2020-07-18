@@ -1214,6 +1214,7 @@ public class StareModule : MonoBehaviour
                 yield return new WaitForSeconds(0.01f);
             }
             module.OnInteract();
+            yield return new WaitForSeconds(0.1f);
         }
         bool announce = false;
         while (coRunning)
@@ -1226,7 +1227,7 @@ public class StareModule : MonoBehaviour
             yield return true;
             yield return new WaitForSeconds(0.01f);
         }
-        yield return new WaitForSeconds(0.1f);
         module.OnInteract();
+        yield return new WaitForSeconds(0.1f);
     }
 }

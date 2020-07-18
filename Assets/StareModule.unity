@@ -199,6 +199,66 @@ Prefab:
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 212366536443620068, guid: 9ee07f25e535b644abbc4cb0b6ba4a7c,
+        type: 2}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 212366536443620068, guid: 9ee07f25e535b644abbc4cb0b6ba4a7c,
+        type: 2}
+      propertyPath: m_WasSpriteAssigned
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 212366536443620068, guid: 9ee07f25e535b644abbc4cb0b6ba4a7c,
+        type: 2}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+    - target: {fileID: 212366536443620068, guid: 9ee07f25e535b644abbc4cb0b6ba4a7c,
+        type: 2}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 212366536443620068, guid: 9ee07f25e535b644abbc4cb0b6ba4a7c,
+        type: 2}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 212366536443620068, guid: 9ee07f25e535b644abbc4cb0b6ba4a7c,
+        type: 2}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 212366536443620068, guid: 9ee07f25e535b644abbc4cb0b6ba4a7c,
+        type: 2}
+      propertyPath: m_FlipX
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 212366536443620068, guid: 9ee07f25e535b644abbc4cb0b6ba4a7c,
+        type: 2}
+      propertyPath: m_FlipY
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 212366536443620068, guid: 9ee07f25e535b644abbc4cb0b6ba4a7c,
+        type: 2}
+      propertyPath: m_MaskInteraction
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 212366536443620068, guid: 9ee07f25e535b644abbc4cb0b6ba4a7c,
+        type: 2}
+      propertyPath: m_DrawMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114174278980545792, guid: 9ee07f25e535b644abbc4cb0b6ba4a7c,
+        type: 2}
+      propertyPath: RequiresTimerVisibility
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114546249064582056, guid: 9ee07f25e535b644abbc4cb0b6ba4a7c,
+        type: 2}
+      propertyPath: _colorblindMode
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 9ee07f25e535b644abbc4cb0b6ba4a7c, type: 2}
   m_IsPrefabParent: 0
