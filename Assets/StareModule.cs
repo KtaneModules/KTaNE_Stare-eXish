@@ -407,22 +407,25 @@ public class StareModule : MonoBehaviour
             count += Regex.Matches(time, "7").Count;
             if (logtime)
             {
-                if (eyeType(eye) == Type.Smol && (eye[0] != '1' && eye[0] != '2'))
-                {
-                    Debug.LogFormat("[The Stare #{0}] This eye's type is Small and its color is neither red nor burgundy, 7 is not a needed digit.", _moduleId);
-                }
-                else if (eyeType(eye) != Type.Smol && (eye[0] != '1' && eye[0] != '2'))
+                if (eyeType(eye) != Type.Smol && (eye[0] != '1' && eye[0] != '2'))
                 {
                     Debug.LogFormat("[The Stare #{0}] This eye's type is not Small and its color is neither red nor burgundy, 7 is a needed digit.", _moduleId);
                 }
-                else if (eyeType(eye) == Type.Smol && (eye[0] == '1' || eye[0] == '2'))
+                else
                 {
                     Debug.LogFormat("[The Stare #{0}] This eye's type is Small and its color is either red or burgundy, 7 is a needed digit.", _moduleId);
                 }
-                else
-                {
-                    Debug.LogFormat("[The Stare #{0}] This eye's type is not Small and its color is either red or burgundy, 7 is not a needed digit.", _moduleId);
-                }
+            }
+        }
+        else
+        {
+            if (eyeType(eye) == Type.Smol && (eye[0] != '1' && eye[0] != '2'))
+            {
+                Debug.LogFormat("[The Stare #{0}] This eye's type is Small and its color is neither red nor burgundy, 7 is not a needed digit.", _moduleId);
+            }
+            else
+            {
+                Debug.LogFormat("[The Stare #{0}] This eye's type is not Small and its color is either red or burgundy, 7 is not a needed digit.", _moduleId);
             }
         }
         if ((allEyes.Count() == 8))
